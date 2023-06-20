@@ -1,0 +1,32 @@
+version: '3'
+
+volumes:
+  us-data-mysql8:
+    driver: local
+
+services:
+
+  mysql8-database:
+    image: mysql:8.0.31
+    volumes:
+      - .:/app:delegated
+      - us-data-mysql8:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - TZ=America/Sao_Paulo
+
+  us:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/var/www/app:delegated
+      - ~/.composer:/home/ambientum/.composer:delegated
+    environment:
+      - XDEBUG_ENABLED=true
+    links:
+      - mysql8-database
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
