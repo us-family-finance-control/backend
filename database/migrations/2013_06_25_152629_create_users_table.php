@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreign('admin_id')->references('id')->on('admins')->cascadeOnDelete();
             $table->unsignedBigInteger('manager_id')->nullable();
             $table->foreign('manager_id')->references('id')->on('managers')->cascadeOnDelete();
-            $table->unsignedBigInteger('depedent_id')->nullable();
-            $table->foreign('depedent_id')->references('id')->on('dependents')->cascadeOnDelete();
+            $table->unsignedBigInteger('dependent_id')->nullable();
+            $table->foreign('dependent_id')->references('id')->on('dependents')->cascadeOnDelete();
             $table->string('name');
             $table->string('username')->unique()->nullable();
             $table->string('email')->unique()->nullable();
