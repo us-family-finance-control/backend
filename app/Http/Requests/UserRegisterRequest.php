@@ -53,7 +53,7 @@ class UserRegisterRequest extends FormRequest
         if ($this->type == User::TYPE_DEPENDENT) {
             return [
                 'type' => 'required|in:' . implode(',', User::getTypes()),
-                'manager_id' => 'required',
+                'manager_id' => 'required|numeric',
                 'name' => 'required|max:200',
                 'username' => 'required|unique:users,username',
                 'kinship' => 'required',

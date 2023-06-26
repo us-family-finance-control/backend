@@ -12,7 +12,7 @@ class Dependent extends Model
     use HasFactory;
 
     protected $fillable = [
-        'kinship'
+        'manager_id', 'kinship'
     ];
 
     public function user(): HasOne
