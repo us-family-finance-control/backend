@@ -64,3 +64,17 @@ Também vale observar se ocorreu alguma alteração nas migrations. Caso positiv
 ```shell
 $ docker-compose exec us php artisan migrate:refresh --seed
 ```
+
+## Documentação da API
+
+Estamos utilizando Swagger-PHP para documentar.
+
+Acesse http://localhost:8080/api/documentation para ler a documentação
+
+### Para realizar a manutenção
+
+Depois de fazer mudanças nos arquivos, execute esse comando:
+
+```shell
+$ docker-compose exec us php artisan l5-swagger:generate
+```
