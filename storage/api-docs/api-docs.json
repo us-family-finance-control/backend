@@ -1,0 +1,153 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Us API",
+        "description": "API do aplicativo US",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Criar novo usuário",
+                "description": "Crie um novo usuário independente da hierarquia",
+                "operationId": "92af7d5f95c73e20136cf817e47bde35",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "É obrigatório para todas as hierarquias, e deve ser um desses: 'admin', 'manager' e 'dependent'",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "É obrigatório para todas as hierarquias",
+                        "required": true
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "É obrigatório para todas as hierarquias",
+                        "required": true
+                    },
+                    {
+                        "name": "password_confirmation",
+                        "in": "query",
+                        "description": "É obrigatório para todas as hierarquias",
+                        "required": true
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "É obrigatório para as hierarquias: 'admin' e 'manager'",
+                        "required": false
+                    },
+                    {
+                        "name": "manager_id",
+                        "in": "query",
+                        "description": "É obrigatório para a hierarquia: 'dependent",
+                        "required": false
+                    },
+                    {
+                        "name": "phone",
+                        "in": "query",
+                        "description": "É obrigatório para a hierarquia: 'manager",
+                        "required": false
+                    },
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "description": "É obrigatório para a hierarquia: 'dependent",
+                        "required": false
+                    },
+                    {
+                        "name": "kinship",
+                        "in": "query",
+                        "description": "É obrigatório para a hierarquia: 'dependent",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "403": {
+                        "description": "Erro ao validar os paramêtros enviados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code": {
+                                            "description": "Código HTTP",
+                                            "type": "integer"
+                                        },
+                                        "message": {
+                                            "description": "Mensagem de erro",
+                                            "type": "string"
+                                        },
+                                        "errors": {
+                                            "description": "Erros",
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "code": 403,
+                                        "message": "Houve um ou mais erros nos paramêtros enviados!",
+                                        "data": {
+                                            "username": [
+                                                "The username has already been taken."
+                                            ],
+                                            "kinship": [
+                                                "The kinship field is required."
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Usuário criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code": {
+                                            "description": "Código HTTP",
+                                            "type": "integer"
+                                        },
+                                        "message": {
+                                            "description": "Mensagem de sucesso",
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "description": "Dados do usuário criado",
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "code": 201,
+                                        "message": "Usuário criado com sucesso!",
+                                        "data": {
+                                            "token": "eyDSA8dDSAD7ASOfsdI0da0..."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Autenticação",
+            "description": "Rotas para gerar um token"
+        }
+    ]
+}
