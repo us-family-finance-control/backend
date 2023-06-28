@@ -43,12 +43,6 @@ $ docker-compose exec mysql8-database mysql -uroot -proot -e "CREATE DATABASE us
 $ docker-compose exec us php artisan migrate --seed
 ```
 
-#### 6) (Opcional) - Para preencher o sistema com alguns Clientes:
-
-```shell
-$ docker-compose exec us php artisan db:seed StartSeeder
-```
-****
 Agora basta acessar pelo browser o endereço http://localhost:8080/graphql
 
 ## Quando você puxar as atualizações
@@ -71,10 +65,32 @@ Estamos utilizando Swagger-PHP para documentar.
 
 Acesse http://localhost:8080/api/documentation para ler a documentação
 
-### Para realizar a manutenção
+### Para realizar a manutenção da documentação
 
 Depois de fazer mudanças nos arquivos, execute esse comando:
 
 ```shell
 $ docker-compose exec us php artisan l5-swagger:generate
+```
+
+## Testes
+
+Estamos utilizando phpunit para realizar testes.
+
+Rode o comando abaixo para executar todos os testes:
+
+```shell
+$ docker-compose exec us php artisan test
+```
+
+Para filtrar por um arquivo
+
+```shell
+$ docker-compose exec us php artisan test --filter=<ArquivoDeExemploTest>
+```
+
+Para filtrar por um teste no arquivo:
+
+```shell
+$ docker-compose exec us php artisan test --filter=<ArquivoDeExemploTest>::<test_nome>
 ```
