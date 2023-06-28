@@ -14,4 +14,12 @@ class ApiError
             'errors' => $errors
         ], 403);
     }
+
+    public static function message(int $code, string $message)
+    {
+        return response()->json([
+            'code' => $code,
+            'message' => $message,
+        ], $code);
+    }
 }

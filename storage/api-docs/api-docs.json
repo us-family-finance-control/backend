@@ -123,7 +123,7 @@
                                             "type": "string"
                                         },
                                         "data": {
-                                            "description": "Dados do usuário criado",
+                                            "description": "Token do usuário criado",
                                             "type": "array",
                                             "items": {}
                                         }
@@ -135,6 +135,125 @@
                                         "data": {
                                             "token": "eyDSA8dDSAD7ASOfsdI0da0..."
                                         }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Realizar login",
+                "description": "Realize login independente da hierarquia",
+                "operationId": "9c7361a02ab87c6f7609f2293c9abf69",
+                "parameters": [
+                    {
+                        "name": "emailOrUsername",
+                        "in": "query",
+                        "description": "É obrigatório ser um email ou um username",
+                        "required": true
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "É obrigatório ser uma senha",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "403": {
+                        "description": "Erro ao validar os paramêtros enviados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code": {
+                                            "description": "Código HTTP",
+                                            "type": "integer"
+                                        },
+                                        "message": {
+                                            "description": "Mensagem de erro",
+                                            "type": "string"
+                                        },
+                                        "errors": {
+                                            "description": "Erros",
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "code": 403,
+                                        "message": "Houve um ou mais erros nos paramêtros enviados!",
+                                        "data": {
+                                            "emailOrUsername": [
+                                                "The emailOrUsername field is required."
+                                            ],
+                                            "password": [
+                                                "The password field is required."
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Login realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code": {
+                                            "description": "Código HTTP",
+                                            "type": "integer"
+                                        },
+                                        "message": {
+                                            "description": "Mensagem de sucesso",
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "description": "Token do usuário",
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "code": 201,
+                                        "message": "Login realizado com sucesso!",
+                                        "data": {
+                                            "token": "eyDSA8dDSAD7ASOfsdI0da0..."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Erro na autenticação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code": {
+                                            "description": "Código HTTP",
+                                            "type": "integer"
+                                        },
+                                        "message": {
+                                            "description": "Mensagem de sucesso",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "code": 404,
+                                        "message": "Falha na autenticação, verifique os dados informados!"
                                     }
                                 }
                             }
