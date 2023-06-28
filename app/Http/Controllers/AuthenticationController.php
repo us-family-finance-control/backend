@@ -141,7 +141,7 @@ class AuthenticationController extends Controller
      *                     @OA\Property(
      *                         property="data",
      *                         type="array",
-     *                         description="Dados do usuário criado",
+     *                         description="Token do usuário criado",
      *                         @OA\Items
      *                     ),
      *                     example={
@@ -169,6 +169,125 @@ class AuthenticationController extends Controller
         );
     }
 
+    /**
+     * @OA\Post(
+     *     tags={"Autenticação"},
+     *     summary="Realizar login",
+     *     description="Realize login independente da hierarquia",
+     *     path="/api/login",
+     *     @OA\Parameter(
+     *         name="emailOrUsername",
+     *         in="query",
+     *         description="É obrigatório ser um email ou um username",
+     *         required=true,
+     *     ),
+     *     @OA\Parameter(
+     *         name="password",
+     *         in="query",
+     *         description="É obrigatório ser uma senha",
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Erro ao validar os paramêtros enviados",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer",
+     *                         description="Código HTTP"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string",
+     *                         description="Mensagem de erro"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="errors",
+     *                         type="array",
+     *                         description="Erros",
+     *                         @OA\Items
+     *                     ),
+     *                     example={
+     *                         "code": 403,
+     *                         "message": "Houve um ou mais erros nos paramêtros enviados!",
+     *                         "data": {
+     *                             "emailOrUsername": {
+     *                                 "The emailOrUsername field is required."
+     *                             },
+     *                             "password": {
+     *                                 "The password field is required."
+     *                             }
+     *                         }
+     *                     }
+     *                 )
+     *              )
+     *         }
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Login realizado com sucesso",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer",
+     *                         description="Código HTTP"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string",
+     *                         description="Mensagem de sucesso"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="data",
+     *                         type="array",
+     *                         description="Token do usuário",
+     *                         @OA\Items
+     *                     ),
+     *                     example={
+     *                         "code": 201,
+     *                         "message": "Login realizado com sucesso!",
+     *                         "data": {
+     *                             "token": "eyDSA8dDSAD7ASOfsdI0da0..."
+     *                         }
+     *                     }
+     *                 )
+     *              )
+     *         }
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Erro na autenticação",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer",
+     *                         description="Código HTTP"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string",
+     *                         description="Mensagem de sucesso"
+     *                     ),
+     *                     example={
+     *                         "code": 404,
+     *                         "message": "Falha na autenticação, verifique os dados informados!",
+     *                     }
+     *                 )
+     *              )
+     *         }
+     *     ),
+     * ),
+     * 
+    */
     public function login(UserLoginRequest $request)
     {
         $user = User::where(function ($q) use ($request) {
