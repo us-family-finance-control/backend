@@ -2,14 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Api\ApiError;
 use App\Api\ApiSuccess;
+use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
+use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Services\TokenJWT;
 use Firebase\JWT\JWT;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Hash;
 
 class AuthenticationController extends Controller
 {
+    private TokenJWT $tokenJWT;
+
+    public function __construct()
+    {
+        $this->tokenJWT = (new TokenJWT(new JWT));
+    }
+
     /**
      * @OA\Post(
      *     tags={"Autenticação"},
@@ -153,7 +165,29 @@ class AuthenticationController extends Controller
         return ApiSuccess::response(
             201,
             'Usuário criado com sucesso!',
-            ['token' => (new TokenJWT(new JWT))->generateByUser($user)]
+            ['token' => $this->tokenJWT->generateByUser($user)]
+        );
+    }
+
+    public function login(UserLoginRequest $request)
+    {
+        $user = User::where(function ($q) use ($request) {
+            $q->where('email', $request->emailOrUsername)
+                ->orWhere('username', $request->emailOrUsername)
+            ;
+        })->first();
+
+        if (is_null($user) || !Hash::check($request->password, $user->password)) {
+            throw new HttpResponseException(ApiError::message(
+                404,
+                'Falha na autenticação, verifique os dados informados!'
+            ));
+        }
+
+        return ApiSuccess::response(
+            200,
+            'Login realizado com sucesso!',
+            ['token' => $this->tokenJWT->generateByUser($user)]
         );
     }
 }
