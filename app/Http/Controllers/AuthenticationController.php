@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Api\ApiError;
 use App\Api\ApiSuccess;
+use App\Http\Requests\TriggerEmailToConfirmRequest;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
+use App\Mail\UserConfirmEmailMail;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Services\TokenJWT;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AuthenticationController extends Controller
 {
@@ -307,6 +310,38 @@ class AuthenticationController extends Controller
             200,
             'Login realizado com sucesso!',
             ['token' => $this->tokenJWT->generateByUser($user)]
+        );
+    }
+
+    public function triggerEmailToConfirm(TriggerEmailToConfirmRequest $request)
+    {
+        $user = User::firstWhere('email', $request->email);
+
+        if (is_null($user)) {
+            throw new HttpResponseException(ApiError::message(
+                '404',
+                'Usuário não encontrado!'
+            ));
+        }
+
+        if (!is_null($user->email_verified_at)) {
+            throw new HttpResponseException(ApiError::message(
+                '401',
+                'O e-mail já foi confirmado!'
+            ));
+        }
+
+        $code = 'abobora';
+
+        $user->update([
+            'email_verify_code' => $code
+        ]);
+
+        Mail::to($user->email)->send(new UserConfirmEmailMail($code));
+
+        return ApiSuccess::message(
+            200,
+            'O e-mail com o código foi enviado com sucesso!'
         );
     }
 }
