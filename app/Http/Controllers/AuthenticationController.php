@@ -10,6 +10,7 @@ use App\Http\Requests\UserRegisterRequest;
 use App\Mail\UserConfirmEmailMail;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use App\Services\GenerateCode;
 use App\Services\TokenJWT;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -331,7 +332,7 @@ class AuthenticationController extends Controller
             ));
         }
 
-        $code = 'abobora';
+        $code = (new GenerateCode())->forVerifyEmail();
 
         $user->update([
             'email_verify_code' => $code
