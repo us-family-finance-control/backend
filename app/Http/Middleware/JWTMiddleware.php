@@ -25,8 +25,8 @@ class JWTMiddleware
 
         if (is_null($bearer) || empty($bearer) || $bearer == 'Bearer null' || $bearer == 'Bearer true') {
             throw new HttpResponseException(ApiError::message(
-                404,
-                'Token não encontrado!'
+                498,
+                'Token inválido!'
             ));
         }
 

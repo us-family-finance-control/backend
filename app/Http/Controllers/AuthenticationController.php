@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Api\ApiError;
 use App\Api\ApiSuccess;
+use App\Http\Requests\ConfirmEmailRequest;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Mail\UserConfirmEmailMail;
+use App\Mail\UserEmailConfirmedMail;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Services\GenerateCode;
@@ -318,13 +320,6 @@ class AuthenticationController extends Controller
         /** @var User */
         $user = auth()->user();
 
-        if (is_null($user)) {
-            throw new HttpResponseException(ApiError::message(
-                '404',
-                'Usuário não encontrado!'
-            ));
-        }
-
         if (!is_null($user->email_verified_at)) {
             throw new HttpResponseException(ApiError::message(
                 '401',
@@ -343,6 +338,37 @@ class AuthenticationController extends Controller
         return ApiSuccess::message(
             200,
             'O e-mail com o código foi enviado com sucesso!'
+        );
+    }
+
+    public function confirmEmail(ConfirmEmailRequest $request)
+    {
+        /** @var User */
+        $user = auth()->user();
+
+        if (!is_null($user->email_verified_at)) {
+            throw new HttpResponseException(ApiError::message(
+                '401',
+                'O e-mail já foi confirmado!'
+            ));
+        }
+
+        if ($user->email_verify_code != $request->code) {
+            throw new HttpResponseException(ApiError::message(
+                '401',
+                'Código incorreto!'
+            ));
+        }
+
+        $user->update([
+            'email_verified_at' => now()
+        ]);
+
+        Mail::to($user->email)->send(new UserEmailConfirmedMail($user));
+
+        return ApiSuccess::message(
+            200,
+            'O e-mail foi confirmado com sucesso!'
         );
     }
 }
