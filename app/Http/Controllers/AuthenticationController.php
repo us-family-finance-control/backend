@@ -315,6 +315,116 @@ class AuthenticationController extends Controller
         );
     }
 
+    /**
+     * @OA\Post(
+     *     tags={"Autenticação"},
+     *     summary="Enviar código de verificação pro email",
+     *     description="Envia um código de verificação para o email para ele confirmar o email",
+     *     path="/api/trigger-email-to-confirm",
+     *     security={ {"BearerAuth": {}}},
+     *     @OA\Response(
+     *         response=401,
+     *         description="O e-mail já foi confirmado",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer",
+     *                         description="Código HTTP"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string",
+     *                         description="Mensagem de erro"
+     *                     ),
+     *                     example={
+     *                         "code": 401,
+     *                         "message": "O e-mail já foi confirmado!"
+     *                     }
+     *                 )
+     *              )
+     *         }
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="E-mail enviado com sucesso!",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer",
+     *                         description="Código HTTP"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string",
+     *                         description="Mensagem de sucesso"
+     *                     ),
+     *                     example={
+     *                         "code": 200,
+     *                         "message": "O e-mail com o código foi enviado com sucesso!"
+     *                     }
+     *                 )
+     *              )
+     *         }
+     *     ),
+     *     @OA\Response(
+     *         response=498,
+     *         description="Token inválido",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer",
+     *                         description="Código HTTP"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string",
+     *                         description="Mensagem de sucesso"
+     *                     ),
+     *                     example={
+     *                         "code": 498,
+     *                         "message": "Token inválido!",
+     *                     }
+     *                 )
+     *              )
+     *         }
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Usuário não encontrado",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer",
+     *                         description="Código HTTP"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string",
+     *                         description="Mensagem de sucesso"
+     *                     ),
+     *                     example={
+     *                         "code": 404,
+     *                         "message": "Usuário não encontrado!",
+     *                     }
+     *                 )
+     *              )
+     *         }
+     *     )
+     * ),
+     * 
+     */
     public function triggerEmailToConfirm()
     {
         /** @var User */

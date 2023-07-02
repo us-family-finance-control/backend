@@ -12,9 +12,18 @@ use Illuminate\Routing\Controller as BaseController;
  *      title="Us API",
  *      description="API do aplicativo US"
  * ),
+ * @OA\SecurityScheme(
+ *      type="http",
+ *      description="Paramêtro obrigatório para identificar se o usuário está autenticado",
+ *      name="Authorization",
+ *      in="header",
+ *      scheme="bearer",
+ *      bearerFormat="JWT",
+ *      securityScheme="BearerAuth"
+ * ),
  * @OA\Tag(
- *   name="Autenticação",
- *   description="Rotas para gerar um token"
+ *      name="Autenticação",
+ *      description="Rotas para gerar um token"
  * ),
  *
  */
