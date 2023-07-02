@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Api\ApiError;
 use App\Api\ApiSuccess;
-use App\Http\Requests\TriggerEmailToConfirmRequest;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Mail\UserConfirmEmailMail;
@@ -314,9 +313,10 @@ class AuthenticationController extends Controller
         );
     }
 
-    public function triggerEmailToConfirm(TriggerEmailToConfirmRequest $request)
+    public function triggerEmailToConfirm()
     {
-        $user = User::firstWhere('email', $request->email);
+        /** @var User */
+        $user = auth()->user();
 
         if (is_null($user)) {
             throw new HttpResponseException(ApiError::message(
