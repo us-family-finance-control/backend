@@ -261,6 +261,276 @@
                     }
                 }
             }
+        },
+        "/api/trigger-email-to-confirm": {
+            "post": {
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Enviar código de verificação pro email",
+                "description": "Envia um código de verificação para o email para ele confirmar o email",
+                "operationId": "85af8f2a0b657264023f311a63e84bde",
+                "responses": {
+                    "409": {
+                        "description": "O e-mail já foi confirmado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code": {
+                                            "description": "Código HTTP",
+                                            "type": "integer"
+                                        },
+                                        "message": {
+                                            "description": "Mensagem de erro",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "code": 409,
+                                        "message": "O e-mail já foi confirmado!"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "E-mail enviado com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code": {
+                                            "description": "Código HTTP",
+                                            "type": "integer"
+                                        },
+                                        "message": {
+                                            "description": "Mensagem de sucesso",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "code": 200,
+                                        "message": "O e-mail com o código foi enviado com sucesso!"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "498": {
+                        "description": "Token inválido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code": {
+                                            "description": "Código HTTP",
+                                            "type": "integer"
+                                        },
+                                        "message": {
+                                            "description": "Mensagem de sucesso",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "code": 498,
+                                        "message": "Token inválido!"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code": {
+                                            "description": "Código HTTP",
+                                            "type": "integer"
+                                        },
+                                        "message": {
+                                            "description": "Mensagem de sucesso",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "code": 404,
+                                        "message": "Usuário não encontrado!"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/confirm-email": {
+            "post": {
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Confirmar email",
+                "description": "Confirma o email do usuário por meio de um código",
+                "operationId": "055eaa314377e8d2923d5e77e3003153",
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "description": "Código enviado anteriormente no e-mail do usuário",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "409": {
+                        "description": "O e-mail já foi confirmado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code": {
+                                            "description": "Código HTTP",
+                                            "type": "integer"
+                                        },
+                                        "message": {
+                                            "description": "Mensagem de erro",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "code": 409,
+                                        "message": "O e-mail já foi confirmado!"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Código enviado pelo usuário incorreto",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code": {
+                                            "description": "Código HTTP",
+                                            "type": "integer"
+                                        },
+                                        "message": {
+                                            "description": "Mensagem de erro",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "code": 401,
+                                        "message": "Código incorreto!"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "E-mail confirmado com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code": {
+                                            "description": "Código HTTP",
+                                            "type": "integer"
+                                        },
+                                        "message": {
+                                            "description": "Mensagem de sucesso",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "code": 200,
+                                        "message": "O e-mail foi confirmado com sucesso!"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "498": {
+                        "description": "Token inválido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code": {
+                                            "description": "Código HTTP",
+                                            "type": "integer"
+                                        },
+                                        "message": {
+                                            "description": "Mensagem de sucesso",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "code": 498,
+                                        "message": "Token inválido!"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code": {
+                                            "description": "Código HTTP",
+                                            "type": "integer"
+                                        },
+                                        "message": {
+                                            "description": "Mensagem de sucesso",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "code": 404,
+                                        "message": "Usuário não encontrado!"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "description": "Paramêtro obrigatório para identificar se o usuário está autenticado",
+                "name": "Authorization",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
         }
     },
     "tags": [

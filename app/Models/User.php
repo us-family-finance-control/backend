@@ -20,7 +20,7 @@ class User extends Authenticatable
     const TYPE_DEPENDENT = 'dependent';
 
     protected $fillable = [
-        'admin_id', 'manager_id', 'dependent_id', 'name', 'username', 'email', 'email_verified_at', 'password',
+        'admin_id', 'manager_id', 'dependent_id', 'name', 'username', 'email', 'email_verify_code', 'email_verified_at', 'password',
     ];
 
     protected $hidden = [
