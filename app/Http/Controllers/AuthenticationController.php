@@ -323,7 +323,7 @@ class AuthenticationController extends Controller
      *     path="/api/trigger-email-to-confirm",
      *     security={ {"BearerAuth": {}}},
      *     @OA\Response(
-     *         response=401,
+     *         response=409,
      *         description="O e-mail já foi confirmado",
      *         content={
      *             @OA\MediaType(
@@ -340,7 +340,7 @@ class AuthenticationController extends Controller
      *                         description="Mensagem de erro"
      *                     ),
      *                     example={
-     *                         "code": 401,
+     *                         "code": 409,
      *                         "message": "O e-mail já foi confirmado!"
      *                     }
      *                 )
@@ -451,6 +451,147 @@ class AuthenticationController extends Controller
         );
     }
 
+    /**
+     * @OA\Post(
+     *     tags={"Autenticação"},
+     *     summary="Confirmar email",
+     *     description="Confirma o email do usuário por meio de um código",
+     *     path="/api/confirm-email",
+     *     security={ {"BearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="code",
+     *         in="query",
+     *         description="Código enviado anteriormente no e-mail do usuário",
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=409,
+     *         description="O e-mail já foi confirmado",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer",
+     *                         description="Código HTTP"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string",
+     *                         description="Mensagem de erro"
+     *                     ),
+     *                     example={
+     *                         "code": 409,
+     *                         "message": "O e-mail já foi confirmado!"
+     *                     }
+     *                 )
+     *              )
+     *         }
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Código enviado pelo usuário incorreto",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer",
+     *                         description="Código HTTP"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string",
+     *                         description="Mensagem de erro"
+     *                     ),
+     *                     example={
+     *                         "code": 401,
+     *                         "message": "Código incorreto!"
+     *                     }
+     *                 )
+     *              )
+     *         }
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="E-mail confirmado com sucesso!",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer",
+     *                         description="Código HTTP"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string",
+     *                         description="Mensagem de sucesso"
+     *                     ),
+     *                     example={
+     *                         "code": 200,
+     *                         "message": "O e-mail foi confirmado com sucesso!"
+     *                     }
+     *                 )
+     *              )
+     *         }
+     *     ),
+     *     @OA\Response(
+     *         response=498,
+     *         description="Token inválido",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer",
+     *                         description="Código HTTP"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string",
+     *                         description="Mensagem de sucesso"
+     *                     ),
+     *                     example={
+     *                         "code": 498,
+     *                         "message": "Token inválido!",
+     *                     }
+     *                 )
+     *              )
+     *         }
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Usuário não encontrado",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="code",
+     *                         type="integer",
+     *                         description="Código HTTP"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string",
+     *                         description="Mensagem de sucesso"
+     *                     ),
+     *                     example={
+     *                         "code": 404,
+     *                         "message": "Usuário não encontrado!",
+     *                     }
+     *                 )
+     *              )
+     *         }
+     *     )
+     * ),
+     * 
+     */
     public function confirmEmail(ConfirmEmailRequest $request)
     {
         /** @var User */
