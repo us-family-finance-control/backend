@@ -6,6 +6,8 @@ use App\Models\Admin;
 use App\Models\Dependent;
 use App\Models\Manager;
 use App\Models\User;
+use App\Services\TokenJWT;
+use Firebase\JWT\JWT;
 use Tests\TestCase;
 
 # docker-compose exec us php artisan test --filter=AuthenticationControllerTest
@@ -243,6 +245,146 @@ class AuthenticationControllerTest extends TestCase
                 'password' => '123456',
             ]
         )->assertStatus(404)
+            ->assertJsonStructure([
+                'code',
+                'message'
+            ])
+        ;
+    }
+
+    # docker-compose exec us php artisan test --filter=AuthenticationControllerTest::test_trigger_email_to_confirm
+    public function test_trigger_email_to_confirm(): void
+    {
+        $manager = Manager::factory()
+            ->has(User::factory(1, ['email_verified_at' => null]))
+            ->create()
+        ;
+
+        $this->post(
+            'api/trigger-email-to-confirm',
+            [],
+            ['Authorization' => (new TokenJWT(new JWT))->generateByUser($manager->user)]
+        )->assertStatus(200)
+            ->assertJsonStructure([
+                'code',
+                'message'
+            ])
+        ;
+    }
+
+    # docker-compose exec us php artisan test --filter=AuthenticationControllerTest::test_trigger_email_to_confirm_is_confirmed
+    public function test_trigger_email_to_confirm_is_confirmed(): void
+    {
+        $manager = Manager::factory()
+            ->has(User::factory())
+            ->create()
+        ;
+
+        $this->post(
+            'api/trigger-email-to-confirm',
+            [],
+            ['Authorization' => (new TokenJWT(new JWT))->generateByUser($manager->user)]
+        )->assertStatus(401)
+            ->assertJsonStructure([
+                'code',
+                'message'
+            ])
+        ;
+    }
+
+    # docker-compose exec us php artisan test --filter=AuthenticationControllerTest::test_trigger_email_to_confirm_without_authorization_header
+    public function test_trigger_email_to_confirm_without_authorization_header(): void
+    {
+        $manager = Manager::factory()
+            ->has(User::factory())
+            ->create()
+        ;
+
+        $this->post(
+            'api/trigger-email-to-confirm',
+            [],
+            []
+        )->assertStatus(498)
+            ->assertJsonStructure([
+                'code',
+                'message'
+            ])
+        ;
+    }
+
+    # docker-compose exec us php artisan test --filter=AuthenticationControllerTest::test_confirm_email
+    public function test_confirm_email(): void
+    {
+        $manager = Manager::factory()
+            ->has(User::factory(1, ['email_verified_at' => null, 'email_verify_code' => 'TESTE']))
+            ->create()
+        ;
+
+        $this->post(
+            'api/confirm-email',
+            ['code' => 'TESTE'],
+            ['Authorization' => (new TokenJWT(new JWT))->generateByUser($manager->user)]
+        )->assertStatus(200)
+            ->assertJsonStructure([
+                'code',
+                'message'
+            ])
+        ;
+    }
+
+    # docker-compose exec us php artisan test --filter=AuthenticationControllerTest::test_confirm_email_is_confirmed
+    public function test_confirm_email_is_confirmed(): void
+    {
+        $manager = Manager::factory()
+            ->has(User::factory(1))
+            ->create()
+        ;
+
+        $this->post(
+            'api/confirm-email',
+            ['code' => 'TESTE'],
+            ['Authorization' => (new TokenJWT(new JWT))->generateByUser($manager->user)]
+        )->assertStatus(401)
+            ->assertJsonStructure([
+                'code',
+                'message'
+            ])
+        ;
+    }
+
+    # docker-compose exec us php artisan test --filter=AuthenticationControllerTest::test_confirm_email_with_incorrect_code
+    public function test_confirm_email_with_incorrect_code(): void
+    {
+        $manager = Manager::factory()
+            ->has(User::factory(1, ['email_verify_code' => 'TESTE', 'email_verified_at' => null]))
+            ->create()
+        ;
+
+        $this->post(
+            'api/confirm-email',
+            ['code' => 'TEST'],
+            ['Authorization' => (new TokenJWT(new JWT))->generateByUser($manager->user)]
+        )->assertStatus(401)
+            ->assertJsonStructure([
+                'code',
+                'message'
+            ])
+        ;
+    }
+
+    # docker-compose exec us php artisan test --filter=AuthenticationControllerTest::test_confirm_email_without_authorization_header
+    public function test_confirm_email_without_authorization_header(): void
+    {
+        $manager = Manager::factory()
+            ->has(User::factory(1, ['email_verify_code' => 'TESTE', 'email_verified_at' => null]))
+            ->create()
+        ;
+
+        $this->post(
+            'api/confirm-email',
+            ['code' => 'TEST'],
+            []
+        )->assertStatus(498)
             ->assertJsonStructure([
                 'code',
                 'message'
